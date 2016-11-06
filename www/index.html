@@ -61,11 +61,21 @@
         </div>
       </div>
       <div ng-repeat = "data in datas">
-{{data.hR}}
-{{data.rR}}
-{{data.sa02}}
-{{data.time}}
-</div>
+        {{data.hR}}
+        {{data.rR}}
+        {{data.sa02}}
+        {{data.time}}
+      </div>
+      <div>
+        Ma data current <br/>
+        {{currentData.hR}}
+        {{currentData.rR}}
+        {{currentData.sa02}}
+        {{currentData.time}}
+      </div>
+      <button ng-click="simulateRead()">Add a sample like it was read</button>
+      <button ng-click="simulateReadAfterTwoSecs()">Add a sample after 2 secs</button>
+      <button ng-click="addSampleData()">Add a sample</button>
     </ion-content>
 
 

@@ -7,31 +7,38 @@
 
   <link rel="manifest" href="manifest.json">
 
-    <!-- un-comment this code to enable service worker
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('service-worker.js')
-          .then(() => console.log('service worker installed'))
-          .catch(err => console.log('Error', err));
-      }
-    </script>-->
+  <!-- un-comment this code to enable service worker
+  <script>
+  if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+  .then(() => console.log('service worker installed'))
+  .catch(err => console.log('Error', err));
+}
+</script>-->
 
-    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+<link href="lib/ionic/css/ionic.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
 
-    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
-    <link href="css/ionic.app.css" rel="stylesheet">
-  -->
+<!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+<link href="css/ionic.app.css" rel="stylesheet">
+-->
 
-  <!-- ionic/angularjs js -->
-  <script src="lib/ionic/js/ionic.bundle.js"></script>
-  <!-- cordova script (this will be a 404 during development) -->
-  <script src="cordova.js"></script>
+<!-- ionic/angularjs js -->
+<script src="lib/ionic/js/ionic.bundle.js"></script>
+<!-- cordova script (this will be a 404 during development) -->
+<script src="cordova.js"></script>
 
-  <!-- your app's js -->
-  <script src="js/app.js"></script>
-  <script src="js/controllers.js"></script>
-  <script src="js/mongo.js"></script>
+<!-- your app's js -->
+<script src="js/app.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script> -->
+
+<script src="js/controllers.js"></script>
+<script src="js/timercontroller.js"></script>
+<script src = "js/Chart.min.js"></script>
+<script src ="js/angular-chart.min.js"></script>
+<!-- <script src="js/chartController.js"></script> -->
+<script src="js/dataExchangeService.js"></script>
+
 
 </head>
 <body ng-app="starter" ng-controller="MainController" >
@@ -40,49 +47,115 @@
     <ion-header-bar class="bar-positive">
       <h1 class="title"> Main Menu</h1>
     </ion-header-bar>
-    <ion-content class="has-header padding" >
 
-    <div   class="list card" >
+    <ion-content  class="has-header padding ion-central">
 
-        <h1>{{ test }}</h1>
-        <div class="item item-icon-left item-assertive">
+
+
+
+      <div  class="list card" >
+
+        <div class="item item-icon-left item-stable" ng-controller="timerController">
+          <i class="icon ion-ios-stopwatch-outline"></i>
+          <p class='whitefont'> {{retrieves}}</p>
+
+        </div>
+
+        <div class="item item-icon-left item-assertive item-text-wrapper">
           <i class="icon ion-ios-pulse-strong"></i>
-          <p> {{data.hR }} </p>
+          <p class='whitefont'> {{currentData.hR }} </p>
         </div>
 
         <div class="item item-icon-left item-balanced">
           <i class="icon ion-leaf"></i>
-          <p ng-bind="data"> </p>
+          <p class='whitefont'> {{currentData.rR}}</p>
+
         </div>
 
         <div class="item item-icon-left item-calm">
           <i class="icon ion-arrow-graph-up-right"></i>
-          <ion-content> {{data.sa02}} </ion-content>
+          <p class='whitefont'> {{currentData.sa02}} </p>
         </div>
       </div>
-      <div ng-repeat = "data in datas">
-        {{data.hR}}
-        {{data.rR}}
-        {{data.sa02}}
-        {{data.time}}
-      </div>
       <div>
-        Ma data current <br/>
-        {{currentData.hR}}
-        {{currentData.rR}}
-        {{currentData.sa02}}
-        {{currentData.time}}
+        <p> Number of elements in the datasample array : {{testLengthDataSample}}</p>
       </div>
-      <button ng-click="simulateRead()">Add a sample like it was read</button>
-      <button ng-click="simulateReadAfterTwoSecs()">Add a sample after 2 secs</button>
+
+      <!-- <div ng-repeat = "data in datas">
+      {{data.hR}}
+      {{data.rR}}
+      {{data.sa02}}
+      {{data.time}}
+    </div> -->
+    <div>
+      Current data =  <br/>
+      {{currentData.hR}}
+      {{currentData.rR}}
+      {{currentData.sa02}}
+      {{currentData.time}}
+
+    </div>
+
+    <div>
+      <!-- <button ng-click="simulateRead()">Add a sample like it was read</button>
+      <button ng-click="simulateReadAfterTwoSecs()">Add a sample after 2 secs</button> -->
       <button ng-click="addSampleData()">Add a sample</button>
-    </ion-content>
+      <button ng-click="randomDataContinuously()">Randomdatacontinuously</button>
+      <button ng-click="arrayTransformation()"> Array transformation </button>
+      <button ng-click="showChart=true">Display chart </button>
+
+    </div>
+
+    <div ng-controller = "timerController">
+      <div class="button-bar">
+        <button class="button ion-play button-positive" ng-click="start(); randomDataContinuously()"></button>
+        <button class="button ion-pause button-dark" ng-click="pause()"></button>
+        <button class="button ion-stop button-positive" ng-click="stop()"></button>
+      </div>
+      <p> Timer =
+        {{retrieves}} </p>
+
+      </div>
 
 
-    <ion-footer-bar class="footer bar-energized">
-      <h1 class="title"> FlexiLight AB</h1>
-      <h2 > {{test2}}  </h2>
-    </ion-pane>
+      <!-- <div ng-controller = "LineCtrl"> -->
+      <!-- <div>
+        <div ng-show="showChart">
+          <canvas id="line" class="chart chart-line" chart-data="dataz"
+          chart-labels="labels" chart-series="series" chart-options="options"
+          chart-dataset-override="datasetOverride" chart-click="onClick"
+        </canvas>
+      </div> -->
+      <!-- Below = chart with test class ! -->
 
-  </body>
-  </html>
+      <div>
+      <div ng-show="showChart">
+      <canvas id="line" class="chart chart-line" chart-data="datasTest"
+      chart-labels="labelsTest" chart-series="seriesTest" chart-options="options"
+      chart-dataset-override="datasetOverride" chart-click="onClick"
+    </canvas>
+  </div>
+
+
+
+
+  <!-- Below : to keep only if we can use the function inside it -->
+
+  <!-- <div> <button ng-click="ArrayTransformation($scope.datas)"> Convert array </button>
+  <div ng-repeat= data in datas></div>
+</div> -->
+
+</div>
+
+
+</ion-content>
+
+
+
+<ion-footer-bar class="footer bar-positive">
+  <h1 class="title"> FlexiLight AB®</h1>
+
+</ion-pane>
+
+</body>
+</html>

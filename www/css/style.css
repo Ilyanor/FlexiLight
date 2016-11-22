@@ -1,4 +1,17 @@
 /* Empty. Add your own CSS if you like */
-item.item-icon-left{
-	background-color:red;
+
+
+p {
+	color: black;
+	font-weight: bold;
+
+}
+
+.whitefont{
+	color:white;
+}
+
+.ion-central {
+    /*background-color: black;*/
+
 }

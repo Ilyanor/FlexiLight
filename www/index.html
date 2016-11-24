@@ -36,13 +36,13 @@
 <script src="js/timercontroller.js"></script>
 <script src = "js/Chart.min.js"></script>
 <script src ="js/angular-chart.min.js"></script>
-<!-- <script src="js/chartController.js"></script> -->
 <script src="js/dataExchangeService.js"></script>
+<!-- <script src="js/angular-timer.js"></script> -->
+<!-- <script src="js/angular-timer.min.js"></script> -->
 
 
 </head>
 <body ng-app="starter" ng-controller="MainController" >
-
   <ion-pane>
     <ion-header-bar class="bar-positive">
       <h1 class="title"> Main Menu</h1>
@@ -55,9 +55,10 @@
 
       <div  class="list card" >
 
-        <div class="item item-icon-left item-stable" ng-controller="timerController">
+        <div class="item item-icon-left item-stable">
           <i class="icon ion-ios-stopwatch-outline"></i>
-          <p class='whitefont'> {{retrieves}}</p>
+          <p class='whitefont'> {{retrieves}}
+          </p>
 
         </div>
 
@@ -97,53 +98,60 @@
     </div>
 
     <div>
+
+      <!-- Functions to test how things are implemented in the data array -->
+
       <!-- <button ng-click="simulateRead()">Add a sample like it was read</button>
       <button ng-click="simulateReadAfterTwoSecs()">Add a sample after 2 secs</button> -->
-      <button ng-click="addSampleData()">Add a sample</button>
+      <!-- <button ng-click="addSampleData()">Add a sample</button>
       <button ng-click="randomDataContinuously()">Randomdatacontinuously</button>
       <button ng-click="arrayTransformation()"> Array transformation </button>
-      <button ng-click="showChart=true">Display chart </button>
+      <button ng-click="showChart=true">Display chart </button> -->
+
+
 
     </div>
 
-    <div ng-controller = "timerController">
+    <div>
       <div class="button-bar">
         <button class="button ion-play button-positive" ng-click="start(); randomDataContinuously()"></button>
         <button class="button ion-pause button-dark" ng-click="pause()"></button>
-        <button class="button ion-stop button-positive" ng-click="stop()"></button>
-      </div>
-      <p> Timer =
-        {{retrieves}} </p>
-
+        <button class="button ion-stop button-positive" ng-click="stop();showResultsButton();"></button>
       </div>
 
-
-      <!-- <div ng-controller = "LineCtrl"> -->
-      <!-- <div>
-        <div ng-show="showChart">
-          <canvas id="line" class="chart chart-line" chart-data="dataz"
-          chart-labels="labels" chart-series="series" chart-options="options"
-          chart-dataset-override="datasetOverride" chart-click="onClick"
-        </canvas>
-      </div> -->
-      <!-- Below = chart with test class ! -->
+      <div></div>
 
       <div>
-      <div ng-show="showChart">
-      <canvas id="line" class="chart chart-line" chart-data="datasTest"
-      chart-labels="labelsTest" chart-series="seriesTest" chart-options="options"
-      chart-dataset-override="datasetOverride" chart-click="onClick"
-    </canvas>
-  </div>
+        <button class="button button-block button-positive" ng-click="showChart=true" ng-show="showResults">
+          Get my results
+        </button>
+      </div>
+
+      <button class="button ion-play button-positive" ng-click="chartGeneration();showChart=true">Chart generation </button>
+
+    </div>
 
 
 
-
-  <!-- Below : to keep only if we can use the function inside it -->
-
-  <!-- <div> <button ng-click="ArrayTransformation($scope.datas)"> Convert array </button>
-  <div ng-repeat= data in datas></div>
+    <!-- <div>
+    <div ng-show="showChart">
+    <canvas id="line" class="chart chart-line" chart-data="dataz"
+    chart-labels="labels" chart-series="series" chart-options="options"
+    chart-dataset-override="datasetOverride" chart-click="onClick"
+  </canvas>
 </div> -->
+
+<!-- Below = chart with test class ! -->
+
+<div>
+  <div ng-show="showChart">
+    <canvas id="line" class="chart chart-line" chart-data="datasTest"
+    chart-labels="labelsTest" chart-series="seriesTest" chart-options="options"
+    chart-dataset-override="datasetOverride" chart-click="onClick"
+  </canvas>
+</div>
+
+
 
 </div>
 

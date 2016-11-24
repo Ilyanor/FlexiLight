@@ -10,10 +10,9 @@ function ($scope, $interval) {
 		if ( angular.isDefined(stop) ) return;
 		stop = $interval( function() {
 			$scope.retrieves = $scope.retrieves + 1;
+
 		}, 1000);
-console.log($scope.retrieves);
 	};
-console.log(angular.version);
 	$scope.pause = function() {
 		if ( angular.isDefined(stop)) {
 			$interval.cancel(stop);

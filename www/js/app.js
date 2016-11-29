@@ -1,48 +1,24 @@
 // Ionic Starter App
 
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-var app=angular.module('starter', ['ionic',"chart.js"]);
+var app=angular.module('starter', ['ionic',"chart.js",'ngCordova']);
+// Nothing here. This page is left blank.
+var db = null;
 
-
-
-app.run(function($ionicPlatform) {
+app.run(function($ionicPlatform,$cordovaSQLite) {
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-
-      // Don't remove this line unless you know what you are doing. It stops the viewport
-      // from snapping when text inputs are focused. Ionic handles this internally for
-      // a much nicer keyboard experience.
       cordova.plugins.Keyboard.disableScroll(true);
     }
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+
+    db=window.openDatabase("Database","1.0","Databest2",2000);
+
+    // $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS etudiant(id INTEGER PRIMARY KEY AUTOINCREMENT, cne VARCHAR, nom TEXT, prenom TEXT)");
+    $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS session(id INTEGER PRIMARY KEY AUTOINCREMENT, time TIME, heartrate INTEGER, oxygen_saturation INTEGER)");
   });
 });
-
-// app.config(function($routeProvider) {
-//         $routeProvider
-//
-//             // route for the home page
-//             .when('/', {
-//                 templateUrl : 'pages/home.html',
-//                 controller  : 'x'
-//             })
-//
-//             // route for the about page
-//             .when('/about', {
-//                 templateUrl : 'pages/about.html',
-//                 controller  : 'aboutController'
-//             })
-//
-//             // route for the contact page
-//             .when('/contact', {
-//                 templateUrl : 'pages/contact.html',
-//                 controller  : 'contactController'
-//             });
-//     });

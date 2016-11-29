@@ -7,25 +7,20 @@
 
   <link rel="manifest" href="manifest.json">
 
-  <!-- un-comment this code to enable service worker
-  <script>
-  if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js')
-  .then(() => console.log('service worker installed'))
-  .catch(err => console.log('Error', err));
-}
-</script>-->
 
-<link href="lib/ionic/css/ionic.css" rel="stylesheet">
-<link href="css/style.css" rel="stylesheet">
 
-<!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
-<link href="css/ionic.app.css" rel="stylesheet">
+  <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+
+  <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+  <link href="css/ionic.app.css" rel="stylesheet">
 -->
 
 <!-- ionic/angularjs js -->
 <script src="lib/ionic/js/ionic.bundle.js"></script>
 <!-- cordova script (this will be a 404 during development) -->
+<!-- <script src="js/ng-cordova.min.js"></script> -->
+<script src="lib/ngCordova/dist/ng-cordova.js"></script>
 <script src="cordova.js"></script>
 
 <!-- your app's js -->
@@ -33,12 +28,15 @@
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script> -->
 
 <script src="js/controllers.js"></script>
-<script src="js/timercontroller.js"></script>
 <script src = "js/Chart.min.js"></script>
 <script src ="js/angular-chart.min.js"></script>
 <script src="js/dataExchangeService.js"></script>
 <!-- <script src="js/angular-timer.js"></script> -->
 <!-- <script src="js/angular-timer.min.js"></script> -->
+<!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/mathjs/3.2.1/math.min.js"></script> -->
+<!-- Consider downloading the lib above !-->
+<!-- <script src="js/moment.js"></script> -->
+
 
 
 </head>
@@ -50,7 +48,9 @@
 
     <ion-content  class="has-header padding ion-central">
 
-
+      <!--  First part is about data generation. Retrieves gives the timer,
+      and currentdata.xx are the random data implemented in addSampleDataTest function,  the one
+      that will need to be modified to recieve those coming from the sensor-->
 
 
       <div  class="list card" >
@@ -67,103 +67,117 @@
           <p class='whitefont'> {{currentData.hR }} </p>
         </div>
 
-        <div class="item item-icon-left item-balanced">
-          <i class="icon ion-leaf"></i>
-          <p class='whitefont'> {{currentData.rR}}</p>
 
-        </div>
+        <!-- Breathing pattern-->
+        <!-- <div class="item item-icon-left item-balanced">
+        <i class="icon ion-leaf"></i>
+        <p class='whitefont'> {{currentData.rR}}</p> -->
+
+        <!-- </div> -->
 
         <div class="item item-icon-left item-calm">
           <i class="icon ion-arrow-graph-up-right"></i>
           <p class='whitefont'> {{currentData.sa02}} </p>
         </div>
       </div>
-      <div>
-        <p> Number of elements in the datasample array : {{testLengthDataSample}}</p>
-      </div>
 
-      <!-- <div ng-repeat = "data in datas">
-      {{data.hR}}
-      {{data.rR}}
-      {{data.sa02}}
-      {{data.time}}
-    </div> -->
-    <div>
-      Current data =  <br/>
-      {{currentData.hR}}
-      {{currentData.rR}}
-      {{currentData.sa02}}
-      {{currentData.time}}
+      <div class="table1">
+        <form>
+          <label class="item item-input">
+            <input type="text" placeholder="CNE" ng-model="etudiant.cne"></label>
+            <label class="item item-input">
+              <input type="text" placeholder="Nom" ng-model="etudiant.nom"></label>
+              <label class="item item-input">
+                <input type="text" placeholder="Prenom" ng-model="etudiant.prenom"></label>
+              </form>
+              <button class="button button-block button-positive" ng-click="insert(etudiant)">Ajout étudiant </button>
+            </div>
 
-    </div>
+            <div class = "padding">
+              <div class="row">
+                <div class ="col col-40">CNE</div>
+                <div class ="col col-40">Nom</div>
+                <div class ="col col-40">Prénom</div>
+              </div>
+              <!-- <div class="row" ng-repeat="datas in datas">
+                <div class ="col col-40">{{datas.time}}</div>
+                <div class ="col col-40">{{datas.hR}}</div>
+                <div class ="col col-40">{{datas.sa02}}</div>
 
-    <div>
+              </div> -->
+            </div>
 
-      <!-- Functions to test how things are implemented in the data array -->
+            <!-- Code below shows the value of each data is added in the array -->
+            <!-- <div>
+            Current data =  <br/>
+            {{currentData.hR}}
+            {{currentData.rR}}
+            {{currentData.sa02}}
+            {{currentData.time}}
 
-      <!-- <button ng-click="simulateRead()">Add a sample like it was read</button>
-      <button ng-click="simulateReadAfterTwoSecs()">Add a sample after 2 secs</button> -->
-      <!-- <button ng-click="addSampleData()">Add a sample</button>
-      <button ng-click="randomDataContinuously()">Randomdatacontinuously</button>
-      <button ng-click="arrayTransformation()"> Array transformation </button>
-      <button ng-click="showChart=true">Display chart </button> -->
+          </div> -->
 
+          <!-- Second part, with the timer and graph. Play launches the timer and the data creation, pause currently does nothing, and
+          stop stops the timer (not the data unfortunately.)
+          When press is stop, another button appears, "Get my results", which will
+          present a graph with the length of the timer and all the data! -->
 
-
-    </div>
-
-    <div>
-      <div class="button-bar">
-        <button class="button ion-play button-positive" ng-click="start(); randomDataContinuously()"></button>
-        <button class="button ion-pause button-dark" ng-click="pause()"></button>
-        <button class="button ion-stop button-positive" ng-click="stop();showResultsButton();"></button>
-      </div>
-
-      <div></div>
-
-      <div>
-        <button class="button button-block button-positive" ng-click="showChart=true" ng-show="showResults">
-          Get my results
-        </button>
-      </div>
-
-      <button class="button ion-play button-positive" ng-click="chartGeneration();showChart=true">Chart generation </button>
-
-    </div>
+          <div>
+            <div class="button-bar">
+              <button class="button ion-play button-positive" ng-click="start(); randomDataContinuously()"></button>
+              <button class="button ion-pause button-dark" ng-click="pause()"></button>
+              <button class="button ion-stop button-positive" ng-click="stop();showResultsButton();"></button>
+            </div>
 
 
+            <div>
+              <p></p>
+            </div>
 
-    <!-- <div>
-    <div ng-show="showChart">
-    <canvas id="line" class="chart chart-line" chart-data="dataz"
-    chart-labels="labels" chart-series="series" chart-options="options"
-    chart-dataset-override="datasetOverride" chart-click="onClick"
-  </canvas>
-</div> -->
+            <div>
+              <button class="button button-block button-positive" ng-click="showChart=true;chartGeneration()" ng-show="showResults">
+                Get my results
+              </button>
+            </div>
+            <!-- This last button is there on purpose to test,
+            the function is analog to stop but it doesn't stop the timer
+            while the graph appears and keeps being updated
+            when the button is being clicked again. Eventually it will disappear
+            on final version -->
 
-<!-- Below = chart with test class ! -->
+            <button class="button ion-play button-positive" ng-click="chartGeneration();showChart=true">Chart generation </button>
 
-<div>
-  <div ng-show="showChart">
-    <canvas id="line" class="chart chart-line" chart-data="datasTest"
-    chart-labels="labelsTest" chart-series="seriesTest" chart-options="options"
-    chart-dataset-override="datasetOverride" chart-click="onClick"
-  </canvas>
-</div>
+          </div>
 
 
 
-</div>
+          <div>
+            <p></p>
+          </div>
 
 
-</ion-content>
+
+          <div>
+            <div ng-show="showChart">
+              <canvas id="line" class="chart chart-line" chart-data="datasTest"
+              chart-labels="labelsTest" chart-series="seriesTest" chart-options="options"
+              chart-dataset-override="datasetOverride" chart-click="onClick" chart-colors = "colors"
+            </canvas>
+          </div>
 
 
 
-<ion-footer-bar class="footer bar-positive">
-  <h1 class="title"> FlexiLight AB®</h1>
+        </div>
 
-</ion-pane>
 
-</body>
-</html>
+      </ion-content>
+
+
+
+      <ion-footer-bar class="footer bar-positive">
+        <h1 class="title"> FlexiLight AB®</h1>
+
+      </ion-pane>
+
+    </body>
+    </html>

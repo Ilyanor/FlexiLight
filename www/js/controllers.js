@@ -11,8 +11,9 @@
 app.controller('MainController', function ($scope, $timeout,$interval,$cordovaSQLite) {
 
 	var timeChart=[];
-var heartRateChart=[];
-var oxygenSaturationChart=[];
+	var heartRateChart=[];
+	var oxygenSaturationChart=[];
+	var count =0;
 
 
 	// Datas is an array of every data we gather. Primarily, it is made of the
@@ -23,6 +24,8 @@ var oxygenSaturationChart=[];
 	$scope.datas = [];
 	$scope.currentData = {};
 	// $scope.arrayLength=datas.length;
+
+
 
 	// TESTING PURPOSE: Random function to create a sample of currentdata and display it.
 	$scope.simulateRead = function () {
@@ -98,10 +101,10 @@ var oxygenSaturationChart=[];
 		var transpTableaux = transposeArrays($scope.datas.map(Object.values)); // we transpose the arrays of the data we have gathered
 		// console.log(transpTableaux);
 		// We create the variables we will play with in the charts
-		 $scope.timeChart = transpTableaux[0];
+		$scope.timeChart = transpTableaux[0];
 		// console.log(timeChart);
 		$scope.heartRateChart=transpTableaux[1];
-		 $scope.oxygenSaturationChart=transpTableaux[3];
+		$scope.oxygenSaturationChart=transpTableaux[3];
 
 		$scope.labelsTest=$scope.timeChart;
 		$scope.seriesTest=['HR','Sa02'];
@@ -196,65 +199,132 @@ var oxygenSaturationChart=[];
 			$scope.showResults = !$scope.showResults;
 		}
 
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; //January is 0!
+		var yyyy = today.getFullYear();
 
-		// app.controller('FormulaireCtrl', function($scope,$cordovaSQLite){
+		if(dd<10) {
+			dd='0'+dd
+		}
+
+		if(mm<10) {
+			mm='0'+mm
+		}
+
+		today = mm+'/'+dd+'/'+yyyy;
+		console.log(today);
+
+
 		$scope.insert=function(etudiant){
+
+
+			$scope.count=null;
+
 			// var query="INSERT INTO session (time,heartrate,oxygen_saturation) VALUES(?,?,?)";
-console.log($scope.timeChart[3]);
-console.log($scope.heartRateChart[3]);
-console.log($scope.oxygenSaturationChart[3]);
 			db.transaction(function(tx) {
+
+				$scope.incrementSession();
+				console.log(count);
 				for(i = 0;i<$scope.datas.length;i++){
-				tx.executeSql('INSERT INTO session VALUES (?,?,?,?)', [null,$scope.timeChart[i],$scope.heartRateChart[i],$scope.oxygenSaturationChart[i]]);
-			}}, function(error) {
-				console.log('Transaction ERROR: ' + error.message);
-			}, function() {
-				console.log('Populated database OK');
-			});
+					tx.executeSql('INSERT INTO clinicalData VALUES (?,?,?,?,?)', [null,$scope.timeChart[i],$scope.heartRateChart[i],$scope.oxygenSaturationChart[i],today+"-" +count]);
+				}}, function(error) {
+					console.log('Transaction ERROR: ' + error.message);
+				}, function() {
+					console.log('Populated database OK');
+				});
+			};
+			console.log(today);
+			// The function below clears the DB and even deletes it.
 
-			// 		$scope.insert=function(etudiant){
+			$scope.delete=function(){
+				db.transaction(function(tx){
+					tx.executeSql('DROP TABLE IF EXISTS clinicalData');
+				},
+				function(error){
+					console.log('Transaction ERROR + error.message');
+				},function(){
+					console.log('Delete OK');
+				})
+			};
 
-			// 			$cordovaSQLite.execute(db,query,[$scope.currentData.time,$scope.currentData.,etudiant.prenom]).then(function(res){
-			// 			// var query="INSERT INTO session (cne,nom,prenom) VALUES(?,?,?)";
-			// 			// $cordovaSQLite.execute(db,query,[etudiant.cne,etudiant.nom,etudiant.prenom]).then(function(res){
-			// 				alert($scope.status="Etudiant ajouté avec succès");
-			// 			},
-			// function(err){
-			// 				alert($scope.status="Erreur lors de l'ajout : "+err.message);
-			// 			});
-			// $scope.load();
-		};
+			$scope.incrementSession= function(){
+				count=count+1;
+			};
 
-		$scope.load=function(){
-			$scope.donnees=[];
-			$cordovaSQLite.execute(db,'SELECT cne,nom,prenom FROM etudiant')
-			.then(
-				function(res){
-					if(res.rows.length){
-						for(var i=0;i<res.rows.length;i++){
-							$scope.donnees.push(res.rows.item(i));
+
+
+			$scope.load=function(){
+				$scope.donnees=[];
+				$cordovaSQLite.execute(db,'SELECT cne,nom,prenom FROM etudiant')
+				.then(
+					function(res){
+						if(res.rows.length){
+							for(var i=0;i<res.rows.length;i++){
+								$scope.donnees.push(res.rows.item(i));
+							}
+							$scope.status="Chargement réussi";
 						}
-						$scope.status="Chargement réussi";
+					},function(err){
+						$scope.status="Erreur lors du chargement" + err.message;
+
 					}
-				},function(err){
-					$scope.status="Erreur lors du chargement" + err.message;
+				)
+			};
 
+			//Check the length of each TABLE
+			//If there is > 60, we take for each 60 value (=1mn) the mean value
+			// (standard deviation possible ?)
+			// The time will become 1/2/3/4/5 ...
+			// Then, when clicking on "chart generation", it will process this request first.
+
+			$scope.conversionInMinutes=function(){
+
+var newTime=0;
+var newHR = 0;
+var newSa=0;
+
+				if($scope.timeChart.length>60) {
+					for(i=0;i<timeChart.length;i+59){
+//time 60s -> 1mn
+
+
+
+//heartrate + oxygen_saturation = mean value;
+					}
 				}
-			)
-		};
-		// });
-	});
-	function transposeArrays(a)
-	{
-		return a[0].map(function (_, c) {
-			return a.map(function (r)
-			{ return r[c];
-			});
-		});
-	};
+			};
 
-	// function convArrayToMin(a) {
-	// 	for (i=0;i< a.length;i+60) {
-	// math.
-	// }
-	// };
+
+
+
+		});
+
+
+
+
+
+
+		function transposeArrays(a)
+		{
+			return a[0].map(function (_, c) {
+				return a.map(function (r)
+				{ return r[c];
+				});
+			});
+		};
+
+
+
+
+
+
+
+
+
+		// Go through
+
+
+		function incrementSession(){
+			count = count+1;
+		}

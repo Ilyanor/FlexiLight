@@ -82,30 +82,31 @@
       </div>
 
       <div class="table1">
-        <form>
+        <!-- <form>
           <label class="item item-input">
             <input type="text" placeholder="CNE" ng-model="etudiant.cne"></label>
             <label class="item item-input">
               <input type="text" placeholder="Nom" ng-model="etudiant.nom"></label>
               <label class="item item-input">
                 <input type="text" placeholder="Prenom" ng-model="etudiant.prenom"></label>
-              </form>
-              <button class="button button-block button-positive" ng-click="insert(etudiant)">Ajout étudiant </button>
+              </form> -->
+              <!-- <button class="button button-block button-positive" ng-click="insert(etudiant);incrementSession()">Ajout étudiant </button>
+<button class="button button-block button positive" ng-click="delete()">Clear the DB</button> -->
+              <button class="button button-block button-positive" ng-click="insert(etudiant)">Store into database</button>
+<button class="button button-block button positive" ng-click="delete()">Clear the database</button>
             </div>
 
-            <div class = "padding">
-              <div class="row">
-                <div class ="col col-40">CNE</div>
-                <div class ="col col-40">Nom</div>
-                <div class ="col col-40">Prénom</div>
-              </div>
-              <!-- <div class="row" ng-repeat="datas in datas">
-                <div class ="col col-40">{{datas.time}}</div>
-                <div class ="col col-40">{{datas.hR}}</div>
-                <div class ="col col-40">{{datas.sa02}}</div>
 
-              </div> -->
-            </div>
+<!-- testing purpose -->
+<!-- <div>
+
+<button class="button button-block button positive" ng-click="incrementSession()">COIIIIN</button>
+count: {{ count }}
+
+ </div> -->
+
+
+
 
             <!-- Code below shows the value of each data is added in the array -->
             <!-- <div>

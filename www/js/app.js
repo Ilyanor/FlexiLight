@@ -19,6 +19,11 @@ app.run(function($ionicPlatform,$cordovaSQLite) {
     db=window.openDatabase("Database","1.0","Databest2",2000);
 
     // $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS etudiant(id INTEGER PRIMARY KEY AUTOINCREMENT, cne VARCHAR, nom TEXT, prenom TEXT)");
-    $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS session(id INTEGER PRIMARY KEY AUTOINCREMENT, time TIME, heartrate INTEGER, oxygen_saturation INTEGER)");
+    $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS clinicalData(id INTEGER PRIMARY KEY AUTOINCREMENT, time TIME, heartrate INTEGER, oxygen_saturation INTEGER, session DATE)");
   });
+  // $ionicPlatform.onHardwareBackButton(function() {
+  //   event.preventDefault();
+  //   event.stopPropagation();
+  //   alert('dont back');
+  // });
 });
